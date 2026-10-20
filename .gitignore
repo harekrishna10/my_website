@@ -1,0 +1,12 @@
+# Local database (created automatically on first run)
+portfolio.db
+
+# Python cache files
+__pycache__/
+*.pyc
+
+# Local secrets
+.env
+
+# Flask instance folder
+instance/

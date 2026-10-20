@@ -1,0 +1,18 @@
+# Render.com free web service for the portfolio backend
+services:
+  - type: web
+    name: portfolio-backend
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      # Permanent database (free): create a project at neon.tech, copy its
+      # connection string, and paste it as the value of DATABASE_URL in the
+      # Render dashboard under Environment. Without DATABASE_URL the app falls
+      # back to a local SQLite file, which Render's free plan wipes every
+      # time the service sleeps, restarts, or redeploys.
+      - key: DATABASE_URL
+        sync: false

@@ -1,0 +1,24 @@
+{% extends "admin.html" %}
+{% block title %}Admin Overview{% endblock %}
+
+{% block admin_content %}
+<h2>Overview</h2>
+<div class="count-grid">
+    <div class="count-card">
+        <span class="count-number">{{ counts.projects }}</span>
+        <span class="count-label">Projects</span>
+    </div>
+    <div class="count-card">
+        <span class="count-number">{{ counts.skills }}</span>
+        <span class="count-label">Skills</span>
+    </div>
+    <div class="count-card">
+        <span class="count-number">{{ counts.viewers }}</span>
+        <span class="count-label">Viewer accounts</span>
+    </div>
+    <div class="count-card">
+        <span class="count-number">{{ counts.signins }}</span>
+        <span class="count-label">Total sign-ins</span>
+    </div>
+</div>
+{% endblock %}

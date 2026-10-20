@@ -1,0 +1,50 @@
+{% extends "admin.html" %}
+{% block title %}Manage Skills{% endblock %}
+
+{% block admin_content %}
+<h2>Skills</h2>
+
+<!-- Add / edit form (edit mode when ?edit=<id> is in the URL) -->
+<div class="card">
+    <h3>{{ 'Edit skill' if edit_skill else 'Add skill' }}</h3>
+    <form method="post" action="{{ url_for('admin_skills') }}">
+        {% if edit_skill %}
+        <input type="hidden" name="skill_id" value="{{ edit_skill.id }}">
+        {% endif %}
+        <label>Skill name
+            <input type="text" name="name" value="{{ edit_skill.name if edit_skill else '' }}" required>
+        </label>
+        <label>Level (0\u2013100)
+            <input type="number" name="level" min="0" max="100"
+                   value="{{ edit_skill.level if edit_skill else 50 }}" required>
+        </label>
+        <button class="btn" type="submit">{{ 'Save changes' if edit_skill else 'Add skill' }}</button>
+        {% if edit_skill %}
+        <a class="btn btn-outline" href="{{ url_for('admin_skills') }}">Cancel</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Existing skills -->
+<table class="data-table">
+    <thead>
+        <tr><th>Name</th><th>Level</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        {% for s in skills %}
+        <tr>
+            <td>{{ s.name }}</td>
+            <td>{{ s.level }}%</td>
+            <td class="actions">
+                <a class="link-btn" href="{{ url_for('admin_skills', edit=s.id) }}">Edit</a>
+                <form method="post" action="{{ url_for('delete_skill', sid=s.id) }}" onsubmit="return confirm('Delete this skill?');">
+                    <button class="link-btn danger" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" class="muted">No skills yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{# Admin layout: sidebar with photo + name, then the page content #}
+{% block content %}
+<div class="container admin-wrap">
+    <aside class="admin-side">
+        <img class="side-photo" src="{{ url_for('static', filename='profile-photo.jpg') }}" alt="Profile photo">
+        <p class="side-name">{{ site_profile.full_name if site_profile else 'Admin' }}</p>
+        <p class="side-sub">Signed in as {{ session.get('username') }}</p>
+        <nav class="side-nav">
+            <a href="{{ url_for('admin') }}">Overview</a>
+            <a href="{{ url_for('admin_profile') }}">Profile</a>
+            <a href="{{ url_for('admin_projects') }}">Projects</a>
+            <a href="{{ url_for('admin_skills') }}">Skills</a>
+            <a href="{{ url_for('admin_viewers') }}">Viewers</a>
+            <a href="{{ url_for('portfolio') }}">View site</a>
+        </nav>
+    </aside>
+    <section class="admin-main">
+        {% block admin_content %}{% endblock %}
+    </section>
+</div>
+{% endblock %}

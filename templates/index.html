@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Harekrishna Chaudhary | Data Analyst &amp; Data Scientist{% endblock %}
+
+{% block content %}
+<!-- Landing hero: photo, name and short introduction -->
+<section class="hero">
+    <div class="container hero-inner">
+        <img class="profile-photo" src="{{ url_for('static', filename='profile-photo.jpg') }}" alt="Photo of {{ profile.full_name }}">
+        <h1>{{ profile.full_name }}</h1>
+        <h2>{{ profile.role_title }}</h2>
+        <p class="hero-desc">{{ profile.intro }}</p>
+    </div>
+</section>
+
+<!-- Login area -->
+<section class="section">
+    <div class="container narrow">
+
+        {% if need_setup %}
+            <!-- Very first visit: no admin exists yet, so create it -->
+            <div class="card">
+                <h2>Create admin account</h2>
+                <p class="muted">This is shown only once. Choose the username and
+                   password you will use to manage the site.</p>
+                <form method="post" action="{{ url_for('setup_admin') }}">
+                    <label>Username
+                        <input type="text" name="username" required>
+                    </label>
+                    <label>Password
+                        <input type="password" name="password" required>
+                    </label>
+                    <label>Confirm password
+                        <input type="password" name="confirm" required>
+                    </label>
+                    <button class="btn" type="submit">Create admin account</button>
+                </form>
+            </div>
+        {% else %}
+            <!-- Admin / Viewer tabs -->
+            <div class="tabs">
+                <button type="button" class="tab active" data-tab="tab-admin">Admin</button>
+                <button type="button" class="tab" data-tab="tab-viewer">Viewer</button>
+            </div>
+
+            <!-- Admin sign in -->
+            <div class="card tab-panel" id="tab-admin">
+                <h2>Sign in as admin</h2>
+                <form method="post" action="{{ url_for('login') }}">
+                    <input type="hidden" name="role" value="admin">
+                    <label>Username
+                        <input type="text" name="username" required>
+                    </label>
+                    <label>Password
+                        <input type="password" name="password" required>
+                    </label>
+                    <button class="btn" type="submit">Sign in</button>
+                </form>
+            </div>
+
+            <!-- Viewer: create an account first, then sign in -->
+            <div class="card tab-panel hidden" id="tab-viewer">
+                <h2>Create viewer account</h2>
+                <form method="post" action="{{ url_for('register') }}">
+                    <label>Username
+                        <input type="text" name="username" required>
+                    </label>
+                    <label>Password
+                        <input type="password" name="password" required>
+                    </label>
+                    <label>Confirm password
+                        <input type="password" name="confirm" required>
+                    </label>
+                    <button class="btn" type="submit">Create account</button>
+                </form>
+                <hr>
+                <h2>Sign in as viewer</h2>
+                <form method="post" action="{{ url_for('login') }}">
+                    <input type="hidden" name="role" value="viewer">
+                    <label>Username
+                        <input type="text" name="username" required>
+                    </label>
+                    <label>Password
+                        <input type="password" name="password" required>
+                    </label>
+                    <button class="btn" type="submit">Sign in</button>
+                </form>
+            </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Switch between the Admin and Viewer tabs
+    var tabs = document.querySelectorAll(".tab");
+    tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+            tabs.forEach(function (t) { t.classList.remove("active"); });
+            tab.classList.add("active");
+            document.querySelectorAll(".tab-panel").forEach(function (p) {
+                p.classList.add("hidden");
+            });
+            document.getElementById(tab.dataset.tab).classList.remove("hidden");
+        });
+    });
+</script>
+{% endblock %}

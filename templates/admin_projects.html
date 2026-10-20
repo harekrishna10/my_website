@@ -1,0 +1,62 @@
+{% extends "admin.html" %}
+{% block title %}Manage Projects{% endblock %}
+
+{% block admin_content %}
+<h2>Projects</h2>
+
+<!-- Add / edit form (edit mode when ?edit=<id> is in the URL) -->
+<div class="card">
+    <h3>{{ 'Edit project' if edit_project else 'Add project' }}</h3>
+    <form method="post" action="{{ url_for('admin_projects') }}">
+        {% if edit_project %}
+        <input type="hidden" name="project_id" value="{{ edit_project.id }}">
+        {% endif %}
+        <label>Title
+            <input type="text" name="title" value="{{ edit_project.title if edit_project else '' }}" required>
+        </label>
+        <label>Description
+            <textarea name="description" rows="3">{{ edit_project.description if edit_project else '' }}</textarea>
+        </label>
+        <label>Tags (comma separated)
+            <input type="text" name="tags" value="{{ edit_project.tags if edit_project else '' }}">
+        </label>
+        <label>Live URL
+            <input type="url" name="live_url" value="{{ edit_project.live_url if edit_project else '' }}">
+        </label>
+        <label>GitHub URL
+            <input type="url" name="github_url" value="{{ edit_project.github_url if edit_project else '' }}">
+        </label>
+        <label class="check">
+            <input type="checkbox" name="visible" {% if not edit_project or edit_project.visible %}checked{% endif %}>
+            Visible on the portfolio
+        </label>
+        <button class="btn" type="submit">{{ 'Save changes' if edit_project else 'Add project' }}</button>
+        {% if edit_project %}
+        <a class="btn btn-outline" href="{{ url_for('admin_projects') }}">Cancel</a>
+        {% endif %}
+    </form>
+</div>
+
+<!-- Existing projects -->
+<table class="data-table">
+    <thead>
+        <tr><th>Title</th><th>Visible</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+        {% for p in projects %}
+        <tr>
+            <td>{{ p.title }}</td>
+            <td>{{ 'Yes' if p.visible else 'No' }}</td>
+            <td class="actions">
+                <a class="link-btn" href="{{ url_for('admin_projects', edit=p.id) }}">Edit</a>
+                <form method="post" action="{{ url_for('delete_project', pid=p.id) }}" onsubmit="return confirm('Delete this project?');">
+                    <button class="link-btn danger" type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" class="muted">No projects yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

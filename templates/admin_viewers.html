@@ -1,0 +1,40 @@
+{% extends "admin.html" %}
+{% block title %}Viewers{% endblock %}
+
+{% block admin_content %}
+<h2>Viewers</h2>
+<p class="muted">Total viewer accounts: <strong>{{ viewers|length }}</strong>.
+   Passwords are never shown here.</p>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Account created</th>
+            <th>Last sign-in</th>
+            <th>Sign-ins</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for v in viewers %}
+        <tr>
+            <td>{{ v.username }}</td>
+            <td>{{ v.created_at }}</td>
+            <td>{{ v.last_sign_in if v.last_sign_in else '\u2014' }}</td>
+            <td>{{ v.sign_in_count }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="muted">No viewer accounts yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Activity log <span class="muted">(newest first)</span></h3>
+<ul class="activity-log">
+    {% for a in activity %}
+    <li><strong>{{ a.username }}</strong> ({{ a.role }}) signed in at {{ a.created_at }}</li>
+    {% else %}
+    <li class="muted">No sign-ins recorded yet.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

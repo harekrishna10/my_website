@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}{{ profile.full_name }} | Portfolio{% endblock %}
+
+{% block content %}
+<!-- Read-only portfolio: no add/edit/delete controls anywhere here -->
+<section class="hero">
+    <div class="container hero-inner">
+        <img class="profile-photo" src="{{ url_for('static', filename='profile-photo.jpg') }}" alt="Photo of {{ profile.full_name }}">
+        <h1>{{ profile.full_name }}</h1>
+        <h2>{{ profile.role_title }}</h2>
+        <p class="hero-desc">{{ profile.intro }}</p>
+        <p class="muted">{{ profile.location }} &middot; {{ profile.email }} &middot; {{ profile.availability }}</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Projects</h2>
+        <div class="projects-grid">
+            {% for p in projects %}
+            <article class="project-card">
+                <h3>{{ p.title }}</h3>
+                <p>{{ p.description }}</p>
+                {% if p.tags %}
+                <div class="tags">
+                    {% for tag in p.tags.split(',') %}
+                    <span>{{ tag.strip() }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="project-links">
+                    {% if p.live_url %}<a href="{{ p.live_url }}" target="_blank" rel="noopener">Live Demo</a>{% endif %}
+                    {% if p.github_url %}<a href="{{ p.github_url }}" target="_blank" rel="noopener">GitHub</a>{% endif %}
+                </div>
+            </article>
+            {% else %}
+            <p class="muted">No projects published yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section section-alt">
+    <div class="container">
+        <h2 class="section-title">Skills</h2>
+        <div class="skills-grid">
+            {% for s in skills %}
+            <div class="skill-card">
+                <h3>{{ s.name }}</h3>
+                <div class="skill-bar"><span style="width:{{ s.level }}%"></span></div>
+            </div>
+            {% else %}
+            <p class="muted">No skills added yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

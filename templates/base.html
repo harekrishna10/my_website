@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Harekrishna Chaudhary | Portfolio{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <!-- Top navigation bar (links change with who is signed in) -->
+    <header class="navbar">
+        <div class="container nav-inner">
+            <a class="logo" href="{% if session.get('role') == 'admin' %}{{ url_for('admin') }}{% elif session.get('role') == 'viewer' %}{{ url_for('portfolio') }}{% else %}{{ url_for('index') }}{% endif %}">HC<span>.</span></a>
+            <nav class="nav-links" id="navLinks">
+                {% if session.get('role') == 'admin' %}
+                    <a href="{{ url_for('admin') }}">Overview</a>
+                    <a href="{{ url_for('admin_profile') }}">Profile</a>
+                    <a href="{{ url_for('admin_projects') }}">Projects</a>
+                    <a href="{{ url_for('admin_skills') }}">Skills</a>
+                    <a href="{{ url_for('admin_viewers') }}">Viewers</a>
+                    <a href="{{ url_for('portfolio') }}">View site</a>
+                    <a href="{{ url_for('logout') }}">Sign out ({{ session.get('username') }})</a>
+                {% elif session.get('role') == 'viewer' %}
+                    <a href="{{ url_for('portfolio') }}">Portfolio</a>
+                    <a href="{{ url_for('logout') }}">Sign out ({{ session.get('username') }})</a>
+                {% else %}
+                    <a href="{{ url_for('index') }}">Home</a>
+                {% endif %}
+            </nav>
+            <button class="menu-toggle" id="menuToggle" aria-label="Open menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- One-time messages, e.g. "Account created" or "Wrong password" -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="container">
+                    <div class="flash">
+                        {% for m in messages %}<p>{{ m }}</p>{% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-inner">
+            <p>&copy; 2026 Harekrishna Chaudhary. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu open/close
+        var menuToggle = document.getElementById("menuToggle");
+        var navLinks = document.getElementById("navLinks");
+        menuToggle.addEventListener("click", function () {
+            navLinks.classList.toggle("open");
+        });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

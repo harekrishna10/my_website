@@ -1,0 +1,31 @@
+{% extends "admin.html" %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block admin_content %}
+<h2>Edit profile</h2>
+<p class="muted">This is the public information shown on the landing page
+   and the viewer portfolio.</p>
+<div class="card">
+    <form method="post">
+        <label>Full name
+            <input type="text" name="full_name" value="{{ profile.full_name }}" required>
+        </label>
+        <label>Role title
+            <input type="text" name="role_title" value="{{ profile.role_title }}" required>
+        </label>
+        <label>Introduction
+            <textarea name="intro" rows="4" required>{{ profile.intro }}</textarea>
+        </label>
+        <label>Location
+            <input type="text" name="location" value="{{ profile.location }}">
+        </label>
+        <label>Email
+            <input type="email" name="email" value="{{ profile.email }}">
+        </label>
+        <label>Availability
+            <input type="text" name="availability" value="{{ profile.availability }}">
+        </label>
+        <button class="btn" type="submit">Save profile</button>
+    </form>
+</div>
+{% endblock %}
